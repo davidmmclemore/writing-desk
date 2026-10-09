@@ -1,0 +1,9 @@
+import {access} from '@/lib/supabase';
+import {sources} from '@/lib/sources';
+import {mapSource,plain,safeUrl} from '@/lib/domain.mjs';
+export const dynamic='force-dynamic';
+export async function POST(req:Request){if(req.headers.get('origin')!==new URL(req.url).origin)return Response.json({error:'Invalid origin'},{status:403});const {db,user}=await access();if(!user)return Response.json({error:'Sign in required'},{status:401});let source='';try{const text=await req.text();if(text.length>5000000)throw new Error('Import is too large');const payload=JSON.parse(text);source=payload.source;const spec=sources.find(s=>s.key===source);if(!spec)throw new Error('Unknown source');let items;
+if(source==='tots'){if(!Array.isArray(payload.items))throw new Error('Import a site content JSON array');items=payload.items.map((r:Record<string,string>)=>{if(!r.id&&!r.slug)throw new Error('Each post needs an id or slug');return {id:String(r.id||r.slug),title:String(r.title||'Untitled post').slice(0,300),status:r.status||'imported',url:safeUrl(r.url||''),summary:plain(r.excerpt).slice(0,500),modified:r.updatedAt||'',publishDate:r.publishAt||'',imported:true};});}
+else {if(!['discover','select'].includes(spec.mode))throw new Error('This app supports manual links or metadata import');const {data,error}=await db.rpc('writingdesk_candidates',{source_key:source});if(error)throw new Error(error.message);items=(data||[]).map((r:Record<string,unknown>)=>mapSource(source,r,spec.url));}
+const {error}=await db.rpc('writingdesk_sync',{source_key:source,items,success:true,message:`${items.length} items refreshed`});if(error)throw new Error(error.message);return Response.json({count:items.length},{headers:{'Cache-Control':'private, no-store'}});
+}catch(e){const message=e instanceof Error?e.message:'Source unavailable';if(source)await db.rpc('writingdesk_sync',{source_key:source,items:[],success:false,message});return Response.json({error:message},{status:400});}}

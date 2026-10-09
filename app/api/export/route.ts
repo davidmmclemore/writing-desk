@@ -1,0 +1,2 @@
+import {access} from '@/lib/supabase';
+export async function GET(){const {db,user}=await access();if(!user)return new Response('Sign in required',{status:401});const {data,error}=await db.rpc('writingdesk_load');if(error)return new Response('Export unavailable',{status:500});return new Response(JSON.stringify({app:'writing-desk',version:1,exportedAt:new Date().toISOString(),...data},null,2),{headers:{'Content-Type':'application/json','Content-Disposition':'attachment; filename="writing-desk-backup.json"','Cache-Control':'private, no-store'}});}

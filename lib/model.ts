@@ -1,0 +1,12 @@
+export const stages=['idea','research','outline','drafting','revising','ready','finished'] as const;
+export type Stage=typeof stages[number];
+export type ProjectData={title:string;description?:string;format?:string;stage:Stage;nextAction?:string;commitment?:boolean;onDesk?:boolean;deskOrder?:number;priority?:string;audience?:string;purpose?:string;recipient?:string;wordGoal?:number;effort?:string;draftDate?:string;deliveryDate?:string;publishDate?:string;publishTime?:string;timezone?:string;completedAt?:string;publishedAt?:string;destination?:string;publicationUrl?:string;publicationState?:string;notes?:string;tags?:string[];seriesId?:string;seriesPosition?:number;waiting?:string;followupDate?:string;pausedUntil?:string;archived?:boolean;sessionDate?:string;reflection?:string};
+export type Row<T=Record<string,unknown>>={id:string;user_id:string;data:T;version:number;updated_at:string;created_at?:string;project_id?:string};
+export type Project=Row<ProjectData>;
+export type Series=Row<{title:string;description?:string;cadence?:string;expected?:number;destination?:string}>;
+export type Task=Row<{title:string;done?:boolean;dueDate?:string}>;
+export type Snapshot={id:string;title:string;status:string;url:string;summary?:string;stage?:string;nextAction?:string;format?:string;modified?:string;dueDate?:string};
+export type SourceItem={id:string;source:string;source_id:string;title:string;url:string;status:string;decision:string;snapshot:Snapshot;updated_at:string};
+export type Link={id:string;project_id:string;source:string;source_id:string;relationship:string;title:string;url:string;snapshot:Snapshot;updated_at:string};
+export type DeskState={projects:Project[];series:Series[];tasks:Task[];links:Link[];discoveries:SourceItem[];runs:{id:string;source:string;success:boolean;message:string;created_at:string}[];reviews:Row[];preferences:{theme?:string;timezone?:string;todayProject?:string}|null};
+export const emptyState:DeskState={projects:[],series:[],tasks:[],links:[],discoveries:[],runs:[],reviews:[],preferences:null};
