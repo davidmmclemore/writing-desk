@@ -32,6 +32,8 @@ npm run start -- --hostname 127.0.0.1
 
 Database regression checks in `tests/database.sql` create throwaway identities inside a transaction and roll everything back. Run using the SQL editor or a trusted database connection.
 
+Authenticated runtime verification: provision an approved throwaway account, write its email/password to a private JSON file, then run `QA_ACCOUNT_FILE=/path/to/account.json node tests/session-smoke.mjs` after the production build. The check exercises actual sign-in, project saves, conflict rejection, all six source readers, server rendering, export, and deletion. It logs no credentials. Delete the throwaway account and its test data after the check.
+
 ## Vercel
 
 Existing project: `writing-desk`, team `david-mclemores-projects`. Framework: Next.js; Node: 24; build command: `npm run build`. The project is connected to `davidmmclemore/writing-desk`.

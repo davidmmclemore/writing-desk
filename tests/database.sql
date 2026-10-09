@@ -23,7 +23,7 @@ perform public.writingdesk_sync('test','[]');
 if (select status from writingdesk.discoveries where id=did)<>'unavailable' then raise exception 'Missing source not surfaced';end if;
 if (select data->>'nextAction' from writingdesk.projects where id=pid)<>'My planning choice' then raise exception 'Planning overwritten';end if;
 perform public.writingdesk_mutate('project',jsonb_build_object('id',pid,'version',1,'data',p->'data'));
-begin perform public.writingdesk_mutate('project',jsonb_build_object('id',pid,'version',1,'data',p->'data')); exception when serialization_failure then blocked:=true;end;
+begin perform public.writingdesk_mutate('project',jsonb_build_object('id',pid,'version',1,'data',p->'data')); exception when sqlstate 'PT409' then blocked:=true;end;
 if not blocked then raise exception 'Stale save accepted';end if;
 perform public.writingdesk_candidates('piece');perform public.writingdesk_candidates('paragraph-drafts');perform public.writingdesk_candidates('paragraphs');perform public.writingdesk_candidates('ideas');perform public.writingdesk_candidates('bible-margins');perform public.writingdesk_candidates('study');
 end $$;
