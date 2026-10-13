@@ -5,7 +5,7 @@ export type Row<T=Record<string,unknown>>={id:string;user_id:string;data:T;versi
 export type Project=Row<ProjectData>;
 export type Series=Row<{title:string;description?:string;cadence?:string;expected?:number;destination?:string}>;
 export type Task=Row<{title:string;done?:boolean;dueDate?:string}>;
-export type Snapshot={id:string;title:string;status:string;url:string;summary?:string;stage?:string;nextAction?:string;format?:string;modified?:string;dueDate?:string};
+export type Snapshot={id:string;title:string;status:string;url:string;summary?:string;stage?:string;nextAction?:string;format?:string;modified?:string;dueDate?:string;publishedAt?:string;destination?:string};
 export type SourceItem={id:string;source:string;source_id:string;title:string;url:string;status:string;decision:string;snapshot:Snapshot;updated_at:string};
 export type Link={id:string;project_id:string;source:string;source_id:string;relationship:string;title:string;url:string;snapshot:Snapshot;updated_at:string};
 export type DeskState={projects:Project[];series:Series[];tasks:Task[];links:Link[];discoveries:SourceItem[];runs:{id:string;source:string;success:boolean;message:string;created_at:string}[];reviews:Row[];preferences:{theme?:string;timezone?:string;todayProject?:string}|null};

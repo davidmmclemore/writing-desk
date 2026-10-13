@@ -1,4 +1,6 @@
+import {publications} from './publications.mjs';
 export const sources=[
+...publications.map(p=>({...p,mode:'feed',description:'Refresh published posts, attach them to projects, or add them to Finished Work. Drafts and schedules are linked manually.'})),
 {key:'piece',name:'The Piece',mode:'discover',url:'https://thepiece.thegatheredpages.com',description:'Open assignments, editorial stages, and draft deadlines.'},
 {key:'paragraph-drafts',name:'Paragraph drafts',mode:'discover',url:'https://onegreatparagraph.thegatheredpages.com',description:'Unfinished drafts. Older drafts open the app; it currently resumes today’s draft.'},
 {key:'paragraphs',name:'Saved paragraphs',mode:'select',url:'https://onegreatparagraph.thegatheredpages.com',description:'Choose work to revise, expand, or publish.'},

@@ -2,6 +2,7 @@
 
 | Source | Current behavior | Boundary |
 |---|---|---|
+| David McLemore / Things Worth Reading (Substack) | Server-side RSS refresh and deliberate published-post selection; draft/post links and destination suggestions | Recent feed window only; older records retained; no private drafts, confirmed scheduling, or direct publishing |
 | The Piece | Live user-scoped draft discovery and metadata refresh | Own records only; never writes drafts |
 | One Great Paragraph drafts | Live discovery | Current app resumes today's draft only; older records link to app home |
 | One Great Paragraph library | Live deliberate selection | Saved paragraphs are not unfinished work |
@@ -18,3 +19,5 @@ Successful refreshes upsert by `(user_id,source,source_id)` and preserve discove
 The source providers are read through SECURITY INVOKER functions, source RLS, and explicit owner predicates. Different source identities may return an empty list; the desk does not map accounts by email or claim ownership.
 
 The public-schema `writingdesk_*` functions are a narrow transport over the isolated, non-exposed `writingdesk` schema. They use caller privileges, enforce current Gathered Pages membership, revoke anon/PUBLIC execution, and do not change the shared exposed-schema list.
+
+Substack: open Connections and Refresh posts for either publication. Choose a post to attach as a Publication or add to Finished Work. Feeds are fixed to the two configured publications; XML, response size, timeout, and post URLs are validated. Feed failures retain records and are visible in refresh history. Refresh is user initiated, not background polling. Paywalled content is not fetched. Source publication timestamps retain their original instant; newly imported finished projects display the date in the account timezone. Existing projects require deliberate status changes.
